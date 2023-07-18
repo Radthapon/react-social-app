@@ -12,8 +12,7 @@ const Register = () => {
     name:"",
   })
 
-  const [err,setErr] = useState(false)
-
+  const [err,setErr] = useState(null)
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -21,16 +20,16 @@ const Register = () => {
   }
 
   const handleClik = async e => {
-    e.perventDefault()
+    e.preventDefault()
     try{
       await axios.post("http://localhost:3000/api/auth/register", input)
       navigate("/login")
     }catch(err){
-      setErr(true)
+      setErr(err.response.data)
     }
   }
-
   console.log(err);
+  
 
   return (
     <div className="register">
@@ -50,10 +49,11 @@ const Register = () => {
         <div className="right">
           <h1>Register</h1>
           <form>
-            <input type="text" placeholder="Username" name="username" onChange={handleChange}/>
-            <input type="email" placeholder="Email" name="email" onChange={handleChange}/>
-            <input type="password" placeholder="Password" name="password" onChange={handleChange}/>
-            <input type="text" placeholder="Name" name="name" onChange={handleChange}/>
+            <input type="text" placeholder="Username" name="username" onChange={handleChange} required/>
+            <input type="email" placeholder="Email" name="email" onChange={handleChange} required/>
+            <input type="password" placeholder="Password" name="password" onChange={handleChange} required/>
+            <input type="text" placeholder="Name" name="name" onChange={handleChange} required/>
+            { err && err }
             <button onClick={handleClik}>Register</button>
           </form>
         </div>
