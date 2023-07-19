@@ -28,8 +28,6 @@ const Register = () => {
       setErr(err.response.data)
     }
   }
-  console.log(err);
-  
 
   return (
     <div className="register">
