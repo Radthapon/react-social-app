@@ -5,7 +5,7 @@ import "./login.scss";
 
 const Login = () => {
 
-  const [input, setInput] = useState({
+  const [inputs, setInputs] = useState({
     username:"",
     password:""
   })
@@ -14,7 +14,7 @@ const Login = () => {
   const navigate = useNavigate()
 
   const handleChange = (e) => {
-    setInput((prev) => ({...prev, [e.target.name]:e.target.value}))
+    setInputs((prev) => ({...prev, [e.target.name]:e.target.value}))
   }
 
   const { login } = useContext(AuthContext);
@@ -22,14 +22,15 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
     try{
-      await login(input);
+      await login(inputs);
       navigate("/")
     }catch(err){
       setErr(err.response.data)
+      console.log(err);
     }
     
   };
-
+  
   return (
     <div className="login">
       <div className="card">
