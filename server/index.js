@@ -32,7 +32,7 @@ const port = 3000
 // Routes Useing
 app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
-app.use("/api/post", postRoutes)
+app.use("/api/posts", postRoutes)
 app.use("/api/comment", commentRoutes)
 app.use("/api/like", likeRoutes)
 
