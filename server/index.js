@@ -48,7 +48,7 @@ app.post("/api/upload", upload.single("file"),(req,res) => {
 app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
 app.use("/api/posts", postRoutes)
-app.use("/api/comment", commentRoutes)
+app.use("/api/comments", commentRoutes)
 app.use("/api/like", likeRoutes)
 
 app.listen(port, () => {

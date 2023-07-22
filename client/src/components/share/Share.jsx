@@ -8,6 +8,7 @@ import { useQueryClient, useMutation } from 'react-query'
 import { makeRequset } from '../../axios'
 
 const Share = () => {
+  const {currentUser} = useContext(AuthContext)
   const [file, setFile] = useState(null);
   const [desc, setDesc] = useState("")
 
@@ -21,8 +22,6 @@ const Share = () => {
       console.log(err);
     }
   };
-
-  const {currentUser} = useContext(AuthContext)
 
   const queryClient = useQueryClient()
 
@@ -55,6 +54,7 @@ const Share = () => {
             placeholder={`What's on your mind ${currentUser.name}?`} 
             onChange={(e)=>setDesc(e.target.value)} 
             value={desc}
+            required
             />
           </div>
           <div className="right">
