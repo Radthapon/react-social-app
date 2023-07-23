@@ -49,7 +49,7 @@ app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
 app.use("/api/posts", postRoutes)
 app.use("/api/comments", commentRoutes)
-app.use("/api/like", likeRoutes)
+app.use("/api/likes", likeRoutes)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
