@@ -13,10 +13,14 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { makeRequset } from "../../axios";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { Update } from "../../components/update/Update";
 
 
 const Profile = () => {
+
+    const [openUpdate,setOpenUpdate] = useState(false)
+
     const queryClient = useQueryClient();
     const {currentUser} = useContext(AuthContext);
 
@@ -66,12 +70,12 @@ const Profile = () => {
       <div className="profile">
         <div className="images">
           <img
-            src={data?.coverPic}
+            src={"/upload/" + data.coverPic}
             alt=""
             className="cover"
           />
           <img
-            src={data?.profilePic}
+            src={"/upload/" + data.profilePic}
             alt=""
             className="profilePic"
           />
@@ -108,7 +112,7 @@ const Profile = () => {
                 </div>
               </div>
               {risLoading ? "londing..." : userId === currentUser.id ? (
-                <button>update</button>
+                <button onClick={(e)=>setOpenUpdate(true)}>update</button>
               ) : (
                 <button onClick={handleFollow}>
                   {checkUserFollow
@@ -125,7 +129,8 @@ const Profile = () => {
         <Posts userId={userId}/>
         </div>
       </div>
-    }  
+    }
+    {openUpdate && <Update setOpenUpdate={setOpenUpdate} userData={data}/>}  
     </>   
   );
 };
