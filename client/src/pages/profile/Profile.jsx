@@ -9,7 +9,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts"
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { makeRequset } from "../../axios";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
@@ -22,12 +22,42 @@ const Profile = () => {
 
     const userId = parseInt(useLocation().pathname.split("/")[2])
 
+    // get user profile
     const { isLoading, error, data } = useQuery(["user"], () =>
         makeRequset.get("/users/find/" + userId).then((res) => {
         return res.data;
       })
     );
-     
+
+        // get follwed user profile
+    const { isLoading:risLoading,data: relationshipData } = useQuery(["relationship"], () =>
+        makeRequset.get("/relationships?followedUserId=" + userId).then((res) => {
+        return res.data;
+      })
+    );
+    const checkUserFollow = relationshipData?.includes(currentUser.id)
+
+
+    const mutation = useMutation((follow)=> {
+      if (follow) return makeRequset.delete("/relationships?userFollow="+userId)
+      return makeRequset.post("/relationships", {userId:currentUser.id, userFollow:userId})
+    },{
+      onSuccess:()=>{
+        queryClient.invalidateQueries(["relationship"])
+      },
+    }
+  );
+
+  const handleFollow = async (e) => {
+    e.preventDefault();
+    try{
+      mutation.mutate(relationshipData.includes(currentUser.id));
+    } catch(err){
+      console.log(err);
+    };
+  };
+
+
   return (
     <>
     {isLoading ? (
@@ -77,10 +107,14 @@ const Profile = () => {
                   <span>{data?.website}</span>
                 </div>
               </div>
-              {userId === currentUser.id ? (
+              {risLoading ? "londing..." : userId === currentUser.id ? (
                 <button>update</button>
               ) : (
-                <button>follow</button>
+                <button onClick={handleFollow}>
+                  {checkUserFollow
+                  ? "Following"
+                  : "follow"}
+                </button>
               )} 
             </div>
             <div className="right">
@@ -88,7 +122,7 @@ const Profile = () => {
               <MoreVertIcon />
             </div>
           </div>
-        <Posts/>
+        <Posts userId={userId}/>
         </div>
       </div>
     }  
